@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Menu Generator ⚙
+title: Menu Generator ⚙ [DISCONTINUED]
 nav_order: 3
 ---
 
-# Menu Generator ⚙
+# Menu Generator ⚙ [DISCONTINUED]
 
 ### Input
 
@@ -44,8 +44,7 @@ _NB: Remove the comments after pasting the above example in the input field_
 
 ---
 
-⚠ This tool has not been extensively tested, if you find a bug, please file a
-<a href="https://github.com/forntoh/LcdMenu/issues/new" style="color: white">new issue</a>
+⚠ DISCONTINUED - Available only on 2.0.0-beta versions
 {: .bg-red-200 .text-grey-lt-000 .p-2 .text-center }
 
 <script>{% include generator.js %}</script>
