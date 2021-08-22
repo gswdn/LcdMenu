@@ -3,7 +3,7 @@
 
   MIT License
 
-  Copyright (c) 2020 Forntoh Thomas
+  Copyright (c) 2020-2021 Forntoh Thomas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -104,6 +104,16 @@ class LcdMenu {
         0b00100,  //   *
         0b00100   //   *
     };
+    /**
+     * Cursor icon. Defaults to right arrow (→).
+     */
+    uint8_t cursorIcon = 0x7E;
+    /**
+     * Determines whether the screen should be updated after an action. Set it
+     * to `false` when you want to display any other content on the screen then
+     * set it back to `true` to show the menu.
+     */
+    bool enableUpdate = true;
 
     /**
      * ## Private Methods
@@ -125,7 +135,7 @@ class LcdMenu {
         //
         uint8_t line = constrain(cursorPosition - top, 0, maxRows - 1);
         lcd->setCursor(0, line);
-        lcd->write(0x7E);
+        lcd->write(cursorIcon);
         //
         // If cursor is at MENU_ITEM_INPUT enable blinking
         //
@@ -221,6 +231,7 @@ class LcdMenu {
      * Draw the menu items and cursor
      */
     void paint() {
+        if (!enableUpdate) return;
         drawMenu();
         drawCursor();
     }
@@ -552,6 +563,30 @@ class LcdMenu {
         //
         // repaint menu
         //
+        paint();
+    }
+    /**
+     * Set the character used to visualize the cursor.
+     * @param newIcon character to display
+     */
+    void setCursorIcon(uint8_t newIcon) {
+        cursorIcon = newIcon;
+        drawCursor();
+    }
+    /**
+     * When you want to display any other content on the screen then call this
+     * function then display your content, later call `show()` to show
+     * the menu
+     */
+    void hide() {
+        enableUpdate = false;
+        lcd->clear();
+    }
+    /**
+     * Show the menu
+     */
+    void show() {
+        enableUpdate = true;
         paint();
     }
     /**
