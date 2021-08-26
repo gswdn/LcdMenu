@@ -8,74 +8,53 @@ parent: Examples
 
 This is a basic example, it will show you how to use callback functions in the LcdMenu library.
 
-Callbacks can be used with menu items of type `ItemCommand` or `ItemToggle`
+Callbacks can be used with menu items of type `ItemCommand`, `ItemInput`, `ItemList` or `ItemToggle`
 
 ![Callback](https://i.imgur.com/1CUPScl.gif)
 
 ## Requirements
 
-- 4x4 Keypad
+- Keyboard
 - LcdDisplay
 
 ## Code
 
-Go to [.../examples/Callbacks/Callbacks.ino](https://github.com/forntoh/LcdMenu/tree/master/examples/Callbacks/Callbacks.ino)
+### 1 Declare the callback function
 
 ```cpp
-// ../../examples/Callbacks/Callbacks.ino#L50-L99
+// ../../examples/Callbacks/Callbacks.ino#L36-L36
 
-MenuItem mainMenu[] = {ItemHeader(),
-                       MenuItem("Start service"),
-                       MenuItem("Connect to WiFi"),
-                       ItemSubMenu("Settings", settingsMenu),
-                       MenuItem("Blink SOS"),
-                       MenuItem("Blink random"),
-                       ItemFooter()};
-/**
- * Create submenu and precise its parent
- */
+void toggleBacklight(uint8_t isOn);
+```
+
+### 1 Add callback to MenuItem
+
+```cpp
+// ../../examples/Callbacks/Callbacks.ino#L51-L56
+
 MenuItem settingsMenu[] = {ItemHeader(mainMenu),
                            //
                            // Include callback in ItemToggle
                            //
                            ItemToggle("Backlight", toggleBacklight),
-                           MenuItem("Contrast"),
-                           ItemFooter()};
+                           MenuItem("Contrast"), ItemFooter()};
+```
 
-LcdMenu menu(LCD_ROWS, LCD_COLS);
+### 1 Define the callback function
 
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
+When `enter()` is invoked, the command _(callback)_ bound to the item is invoked.
 
-void setup() { menu.setupLcdWithMenu(0x27, mainMenu); }
+```cpp
+// ../../examples/Callbacks/Callbacks.ino#L88-L95
 
-void loop() {
-    char key = keypad.getKey();
-    if (key == NO_KEY) return;
-
-    switch (key) {
-        case 'A':
-            menu.up();
-            break;
-        case 'B':
-            menu.down();
-            break;
-        case 'C':
-            // callback funtion will be executed when enter is pressed
-            menu.enter();
-            break;
-        case 'D':
-            menu.back();
-            break;
-        default:
-            break;
-    }
-}
 /**
  * Define callback
  */
-void toggleBacklight() { menu.lcd->setBacklight(menu.getItemAt(menu.getCursorPosition())->isOn); }
+void toggleBacklight(uint8_t isOn) {
+    menu.lcd->setBacklight(isOn);
+    // Or this way
+    menu.toggleBacklight();
+}
 ```
 
-## Circuit
-
-<img src="{{ site.baseurl }}/assets/img/circuit.png" alt="Circuit">
+Full code 👉 [.../examples/Callbacks/Callbacks.ino](https://github.com/forntoh/LcdMenu/tree/master/examples/Callbacks/Callbacks.ino)

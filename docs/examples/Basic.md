@@ -12,7 +12,7 @@ This is a basic example, it will show you how to get started with the LcdMenu li
 
 ## Requirements
 
-- 4x4 Keypad
+- Keyboard
 - LcdDisplay
 
 ## Code
@@ -20,7 +20,7 @@ This is a basic example, it will show you how to get started with the LcdMenu li
 Go to [.../examples/Basic/Basic.ino](https://github.com/forntoh/LcdMenu/tree/master/examples/Basic/Basic.ino)
 
 ```cpp
-// ../../examples/Basic/Basic.ino#L43-L85
+// ../../examples/Basic/Basic.ino#L35-L77
 
 // Define the main menu
 extern MenuItem mainMenu[];
@@ -36,37 +36,33 @@ MenuItem mainMenu[] = {ItemHeader(),
 // Construct the LcdMenu
 LcdMenu menu(LCD_ROWS, LCD_COLS);
 
-// Setup keypad
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
-
 void setup() {
+    Serial.begin(9600);
     // Initialize LcdMenu with the menu items
     menu.setupLcdWithMenu(0x27, mainMenu);
 }
 
 void loop() {
-    char key = keypad.getKey();
-    if (key == NO_KEY) return;
+    if (!Serial.available()) return;
+    char command = Serial.read();
 
-    switch (key) {
-        case 'A':
-            menu.up();
-            break;
-        case 'B':
-            menu.down();
-            break;
-        case 'C':
-            menu.enter();
-            break;
-        case 'D':
-            menu.back();
-            break;
-        default:
-            break;
-    }
+    if (command == UP)
+        menu.up();
+    else if (command == DOWN)
+        menu.down();
+    else if (command == LEFT)
+        menu.left();
+    else if (command == RIGHT)
+        menu.right();
+    else if (command == ENTER)
+        menu.enter();
+    else if (command == BACK)
+        menu.back();
+    else if (command == CLEAR)
+        menu.clear();
+    else if (command == BACKSPACE)
+        menu.backspace();
+    else
+        menu.type((String)command);
 }
 ```
-
-## Circuit
-
-<img src="{{ site.baseurl }}/assets/img/circuit.png" alt="Circuit">
