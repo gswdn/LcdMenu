@@ -20,10 +20,6 @@ ItemList	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-creatMenu	KEYWORD2
-readLine	KEYWORD2
-generateMenu	KEYWORD2
-line	KEYWORD2
 drawCursor	KEYWORD2
 drawMenu	KEYWORD2
 isAtTheStart	KEYWORD2
