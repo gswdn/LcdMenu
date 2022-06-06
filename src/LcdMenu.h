@@ -163,6 +163,8 @@ class LcdMenu {
      */
     void drawMenu() {
         lcd->clear();
+        boolean lastItemDrawn = false;
+
         //
         // print the menu items
         //
@@ -204,34 +206,28 @@ class LcdMenu {
                     break;
             }
             // if we reached the end of menu, stop
-            if (currentMenuTable[i].getType() == MENU_ITEM_END_OF_MENU) break;
+            if (currentMenuTable[i].getType() == MENU_ITEM_END_OF_MENU || currentMenuTable[i+1].getType() == MENU_ITEM_END_OF_MENU)
+            {
+                lastItemDrawn=true;
+                break;
+            }
         }
         //
         // determine if cursor is at the top
         //
-        if (top == 1) {
-            //
-            // Print the down arrow only
-            //
-            lcd->setCursor(maxCols - 1, maxRows - 1);
-            lcd->write(byte(1));
-        } else if (!isAtTheStart() && !isAtTheEnd()) {
-            //
-            // Print the down arrow
-            //
-            lcd->setCursor(maxCols - 1, maxRows - 1);
-            lcd->write(byte(1));
+        if (top > 1) {
             //
             // Print the up arrow
             //
             lcd->setCursor(maxCols - 1, 0);
             lcd->write(byte(0));
-        } else if (isAtTheEnd()) {
+        }
+        if (!lastItemDrawn) {
             //
-            // Print the up arrow only
+            // Print the down arrow
             //
-            lcd->setCursor(maxCols - 1, 0);
-            lcd->write(byte(0));
+            lcd->setCursor(maxCols - 1, maxRows - 1);
+            lcd->write(byte(1));
         }
     }
     /**
